@@ -45,16 +45,17 @@ component
     extractTokens();
     signFormFields();
     generateSignatures();
-    getAuthorizationHeader(variables.signedForm)
-
-    // send data to mosparo
+    
     local.requestData = [
       'submitToken'         : variables.submitToken,
       'validationSignature' : variables.formSignatures.validationSignature,
       'formSignature'       : variables.formSignatures.formSignature,
       'formData'            : variables.signedForm,
-    ];
+      ];
 
+    getAuthorizationHeader(local.requestData);
+
+    // send data to mosparo
     http charset='UTF-8'
     method='POST'
     result='local.result'
@@ -67,7 +68,7 @@ component
       httpparam name="formSignature" type="formField" value="#variables.formSignatures.formSignature#";
       httpparam name="formData" type="formField" value="#serializeJSON(variables.signedForm)#";
     }
-    
+    writeDump(var=variables.authHeader, label='Auth');
     writeDump(var=this, label='data');
     writeDump(var=local.result, label='response');
     abort;
@@ -152,8 +153,7 @@ component
     string publicKey = variables.publicKey,
     string privateKey = variables.privateKey
   ) {
-    local.apiEndpoint = "/api/v1/verification/verify";
-    local.hash = lCase(hmac(local.apiEndpoint & serializeJSON(arguments.formData), getPrivateKey(), 'HmacSHA256'));
+    local.hash = lCase(hmac(getApiEndpoint() & serializeJSON(arguments.formData), getPrivateKey(), 'HmacSHA256'));
     local.autHeader = toBase64(arguments.publicKey & ":" & local.hash);
 
     variables.authHeader = local.autHeader;
