@@ -45,6 +45,7 @@ component
     extractTokens();
     signFormFields();
     generateSignatures();
+    getAuthorizationHeader(variables.signedForm)
 
     // send data to mosparo
     local.requestData = [
@@ -53,23 +54,22 @@ component
       'formSignature'       : variables.formSignatures.formSignature,
       'formData'            : variables.signedForm,
     ];
-    local.requestSignature = generateSignature(string='#getApiEndpoint()##serializeJSON(variables.signedForm)#');
 
-    writeDump(this);
     http charset='UTF-8'
     method='POST'
     result='local.result'
     url='#getHost()##getApiEndpoint()#'
     {
       // httpparam type='header' name='Accept'         value='application/json';
-      httpparam type='header' name='Authorization'  value='#getPublicKey()#:#local.requestSignature#';
+      httpparam type='header' name='Authorization' value='#variables.authHeader#';
       httpparam name="submitToken" type="formField" value="#variables.submitToken#";
       httpparam name="validationSignature" type="formField" value="#variables.formSignatures.validationSignature#";
       httpparam name="formSignature" type="formField" value="#variables.formSignatures.formSignature#";
       httpparam name="formData" type="formField" value="#serializeJSON(variables.signedForm)#";
     }
-
-    writeDump(local.result);
+    
+    writeDump(var=this, label='data');
+    writeDump(var=local.result, label='response');
     abort;
 
     return local.allData;
@@ -140,5 +140,21 @@ component
    */
   private String function replaceCRLF(required String string){
     return replace(arguments.string, '#chr(13)##chr(10)#', ' ');
+  }
+
+  /**
+   * Generates the authorization header for the API call.
+   *
+   * @param formData The data struct to be used in generating the header.
+   */
+  private void function getAuthorizationHeader(
+    required struct formData,
+    string publicKey = variables.publicKey,
+    string privateKey = variables.privateKey
+  ) {
+    local.apiEndpoint = "/api/v1/verification/verify";
+    local.hash = lCase(hmac(local.apiEndpoint & serializeJSON(arguments.formData), getPrivateKey(), 'HmacSHA256'));
+
+    variables.authHeader = "#getPublicKey()#:#local.hash#";
   }
 }
