@@ -63,10 +63,10 @@ component
     {
       // httpparam type='header' name='Accept'         value='application/json';
       httpparam type='header' name='Authorization' value='#variables.authHeader#';
-      httpparam name="submitToken" type="formField" value="#variables.submitToken#";
-      httpparam name="validationSignature" type="formField" value="#variables.formSignatures.validationSignature#";
-      httpparam name="formSignature" type="formField" value="#variables.formSignatures.formSignature#";
-      httpparam name="formData" type="formField" value="#serializeJSON(variables.signedForm)#";
+      httpparam name="submitToken" type="body" value="#variables.submitToken#";
+      httpparam name="validationSignature" type="body" value="#variables.formSignatures.validationSignature#";
+      httpparam name="formSignature" type="body" value="#variables.formSignatures.formSignature#";
+      httpparam name="formData" type="body" value="#serializeJSON(variables.signedForm)#";
     }
     writeDump(var=variables.authHeader, label='Auth');
     writeDump(var=this, label='data');
