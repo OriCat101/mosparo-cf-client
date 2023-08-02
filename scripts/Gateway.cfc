@@ -61,8 +61,12 @@ component
     result='local.result'
     url='#getHost()##getApiEndpoint()#'
     {
-      httpparam type='header' name='Accept'         value='application/json';
+      // httpparam type='header' name='Accept'         value='application/json';
       httpparam type='header' name='Authorization'  value='#getPublicKey()#:#local.requestSignature#';
+      httpparam name="submitToken" type="formField" value="#variables.submitToken#";
+      httpparam name="validationSignature" type="formField" value="#variables.formSignatures.validationSignature#";
+      httpparam name="formSignature" type="formField" value="#variables.formSignatures.formSignature#";
+      httpparam name="formData" type="formField" value="#serializeJSON(variables.signedForm)#";
     }
 
     writeDump(local.result);
