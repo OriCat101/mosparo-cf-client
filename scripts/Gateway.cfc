@@ -154,7 +154,8 @@ component
   ) {
     local.apiEndpoint = "/api/v1/verification/verify";
     local.hash = lCase(hmac(local.apiEndpoint & serializeJSON(arguments.formData), getPrivateKey(), 'HmacSHA256'));
+    local.autHeader = toBase64(arguments.publicKey & ":" & local.hash);
 
-    variables.authHeader = "#getPublicKey()#:#local.hash#";
+    variables.authHeader = local.autHeader;
   }
 }
