@@ -81,7 +81,7 @@ component
   private void function signFormFields(){
     variables.signedForm = {};
     for (local.key in variables.preparedForm){
-      variables.signedForm[lCase(local.key)] = generateSignature(string=variables.preparedForm[local.key]);
+      variables.signedForm[lCase(local.key)] = lCase(hash(variables.preparedForm[local.key], "SHA-256"));
     }
   }
 

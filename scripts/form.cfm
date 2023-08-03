@@ -23,10 +23,8 @@
   <br><br>
   <div id="#local.G.getHtmlId()#"></div>
   <br><br>
-
-  <input type="submit" value="Senden">
-
 </form>
+<button id='fsubmit' style="background-color: ##00ff00;">CLICKKK!</button>
 
 <!--- ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== --->
 <script src="#local.G.getHost()#/build/mosparo-frontend.js" defer></script>
