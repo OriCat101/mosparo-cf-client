@@ -51,7 +51,7 @@ component
       'validationSignature' : variables.formSignatures.validationSignature,
       'formSignature'       : variables.formSignatures.formSignature,
       'formData'            : variables.signedForm,
-      ];
+    ];
 
     getAuthorizationHeader(local.requestData);
 
@@ -61,16 +61,15 @@ component
     result='local.result'
     url='#getHost()##getApiEndpoint()#'
     {
-      // httpparam type='header' name='Accept'         value='application/json';
+      // httpparam type='header' name='Accept' value='application/json';
       httpparam type='header' name='Authorization' value='#variables.authHeader#';
-      httpparam name="submitToken" type="body" value="#variables.submitToken#";
-      httpparam name="validationSignature" type="body" value="#variables.formSignatures.validationSignature#";
-      httpparam name="formSignature" type="body" value="#variables.formSignatures.formSignature#";
-      httpparam name="formData" type="body" value="#serializeJSON(variables.signedForm)#";
+      httpparam type='header' name='Content-Type' value='application/json';
+      httpparam type="body" value="#serializeJSON(local.requestData)#";
     }
     writeDump(var=variables.authHeader, label='Auth');
-    writeDump(var=this, label='data');
+    writeDump(var=local.requestData, label='request data');
     writeDump(var=local.result, label='response');
+    writeDump(var=this, label='data', expand=false);
     abort;
 
     return local.allData;
@@ -140,7 +139,7 @@ component
    * replace crlf
    */
   private String function replaceCRLF(required String string){
-    return replace(arguments.string, '#chr(13)##chr(10)#', ' ');
+    return rereplace(arguments.string, "\r\n", "#chr(10)#", "all");
   }
 
   /**
