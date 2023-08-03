@@ -22,14 +22,16 @@ component
    * @hint initialize component
    * @return this
    */
-  public component function init(){
+  public component function init(
+    required struct objectParams
+  ){
     // variables.m = application.serviceFactory.getBean("m");
     variables.htmlId      = 'mosparo-box';
-    variables.host        = 'http://127.0.0.1:8080';
     variables.apiEndpoint = '/api/v1/verification/verify';
-    variables.uuid        = 'd1653c66-dd23-4f63-8e96-2d1bd3836e04';
-    variables.publicKey   = 'AUfQvl1b4Rm_FQLijdrFVb-Rn-Aqu7gQbY_8W4jL3SM';
-    variables.privateKey  = 'FoCOk54YFXkbzXmRog7V7zGuwboHvyp1RhssfdMhh9A';
+    variables.host        = objectParams.mosparoHost;
+    variables.uuid        = objectParams.mosparoUUID;
+    variables.publicKey   = objectParams.mosparoPublicKey;
+    variables.privateKey  = objectParams.mosparoPrivateKey;
   
     return this;
   }
