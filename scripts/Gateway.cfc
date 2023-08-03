@@ -37,7 +37,7 @@ component
   /**
    * initialize process
    */
-  public struct function initializeProcess(
+  public boolean function initializeProcess(
     required struct data
   ){
     savePureForm(data=arguments.data);
@@ -66,13 +66,13 @@ component
       httpparam type='header' name='Content-Type' value='application/json';
       httpparam type="body" value="#serializeJSON(local.requestData)#";
     }
-    writeDump(var=variables.authHeader, label='Auth');
-    writeDump(var=local.requestData, label='request data');
-    writeDump(var=local.result, label='response');
-    writeDump(var=this, label='data', expand=false);
-    abort;
 
-    return local.allData;
+    local.isValid = false;
+    if (structKeyExists(deserializeJSON(local.result.filecontent), "valid")) {
+      local.isValid = deserializeJSON(local.result.filecontent)["valid"];
+    }
+
+    return local.isValid;
   }
 
   /**
