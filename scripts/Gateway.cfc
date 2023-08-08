@@ -17,6 +17,7 @@ component
   property type="String" name="validationToken";
   property type="struct" name="signedForm";
   property type="struct" name="formSignatures";
+  property type="struct" name="objectParams";
 
   /**
    * @hint initialize component
@@ -25,7 +26,6 @@ component
   public component function init(
     required struct objectParams
   ){
-    // variables.m = application.serviceFactory.getBean("m");
     variables.htmlId      = 'mosparo-box';
     variables.apiEndpoint = '/api/v1/verification/verify';
     variables.host        = objectParams.mosparoHost;
@@ -63,7 +63,6 @@ component
     result='local.result'
     url='#getHost()##getApiEndpoint()#'
     {
-      // httpparam type='header' name='Accept' value='application/json';
       httpparam type='header' name='Authorization' value='#variables.authHeader#';
       httpparam type='header' name='Content-Type' value='application/json';
       httpparam type="body" value="#serializeJSON(local.requestData)#";
